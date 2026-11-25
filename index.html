@@ -1,0 +1,1135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TENET Decentralized Token — Staking & DeFi Ecosystem</title>
+  <style>
+    :root {
+      /* Light background & high-contrast font colors derived from it */
+      --bg-light: #f4f7fb;
+      --bg-surface: #ffffff;
+      --bg-subtle: #eef2f7;
+      --bg-card: #ffffff;
+      --bg-card-hover: #f8fafc;
+      --border-light: #dbe3ee;
+      --border-accent: #0284c7;
+
+      /* High-contrast text colors on light background */
+      --text-main: #0f172a;
+      --text-secondary: #1e293b;
+      --text-muted: #475569;
+
+      /* Accents tuned for readability on light surfaces */
+      --accent-blue: #0284c7;
+      --accent-blue-dark: #0369a1;
+      --accent-purple: #6d28d9;
+      --accent-emerald: #047857;
+      --accent-amber: #b45309;
+      --accent-pink: #be185d;
+
+      --gradient-primary: linear-gradient(135deg, #0284c7 0%, #6d28d9 100%);
+      --shadow-soft: 0 8px 24px rgba(15, 23, 42, 0.06);
+      --shadow-card: 0 4px 16px rgba(15, 23, 42, 0.05);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-light);
+      background-image:
+        radial-gradient(circle at 12% 15%, rgba(2, 132, 199, 0.08), transparent 35%),
+        radial-gradient(circle at 88% 80%, rgba(109, 40, 217, 0.08), transparent 40%);
+      color: var(--text-main);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* Navigation */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(12px);
+      background: rgba(255, 255, 255, 0.92);
+      border-bottom: 1px solid var(--border-light);
+      padding: 1rem 5%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+      box-shadow: 0 2px 10px rgba(15, 23, 42, 0.04);
+    }
+
+    .logo {
+      font-size: 1.55rem;
+      font-weight: 800;
+      letter-spacing: 1.5px;
+      background: var(--gradient-primary);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+    }
+
+    nav {
+      display: flex;
+      gap: 1.4rem;
+      flex-wrap: wrap;
+    }
+
+    nav a {
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 0.92rem;
+      font-weight: 600;
+      transition: color 0.2s;
+    }
+
+    nav a:hover {
+      color: var(--accent-blue);
+    }
+
+    .btn-primary {
+      background: var(--gradient-primary);
+      color: #ffffff;
+      font-weight: 700;
+      border: none;
+      padding: 0.68rem 1.35rem;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 0.92rem;
+      transition: transform 0.2s, box-shadow 0.2s;
+      box-shadow: 0 4px 14px rgba(2, 132, 199, 0.25);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 18px rgba(109, 40, 217, 0.28);
+    }
+
+    .btn-outline {
+      background: var(--bg-surface);
+      color: var(--accent-blue-dark);
+      border: 1.5px solid var(--accent-blue);
+      padding: 0.62rem 1.2rem;
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: 700;
+      transition: all 0.2s;
+    }
+
+    .btn-outline:hover {
+      background: rgba(2, 132, 199, 0.08);
+    }
+
+    main {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 2rem 5% 5rem;
+    }
+
+    section {
+      margin-bottom: 3.75rem;
+    }
+
+    .section-title {
+      font-size: 1.8rem;
+      font-weight: 800;
+      color: var(--text-main);
+      margin-bottom: 0.35rem;
+    }
+
+    .section-sub {
+      color: var(--text-muted);
+      margin-bottom: 1.6rem;
+      font-size: 0.96rem;
+    }
+
+    /* Slideshow Hero */
+    .slideshow-container {
+      position: relative;
+      border-radius: 20px;
+      overflow: hidden;
+      border: 1px solid var(--border-light);
+      background: linear-gradient(135deg, #ffffff 0%, #eef4fb 100%);
+      box-shadow: var(--shadow-soft);
+      min-height: 340px;
+      display: flex;
+      align-items: center;
+    }
+
+    .slide {
+      display: none;
+      padding: 3rem 4rem;
+      width: 100%;
+      animation: fadeSlide 0.5s ease;
+    }
+
+    .slide.active {
+      display: grid;
+      grid-template-columns: 1.3fr 0.7fr;
+      gap: 2rem;
+      align-items: center;
+    }
+
+    @keyframes fadeSlide {
+      from { opacity: 0.25; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .slide-badge {
+      display: inline-block;
+      padding: 0.32rem 0.85rem;
+      border-radius: 999px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      background: rgba(2, 132, 199, 0.12);
+      color: var(--accent-blue-dark);
+      border: 1px solid rgba(2, 132, 199, 0.3);
+      margin-bottom: 0.9rem;
+    }
+
+    .slide h1 {
+      font-size: 2.3rem;
+      line-height: 1.2;
+      color: var(--text-main);
+      margin-bottom: 0.95rem;
+    }
+
+    .slide p {
+      color: var(--text-muted);
+      font-size: 1.04rem;
+      margin-bottom: 1.5rem;
+      max-width: 620px;
+    }
+
+    .slide p strong {
+      color: var(--text-main);
+    }
+
+    .slide-visual {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-light);
+      border-radius: 16px;
+      padding: 1.8rem;
+      text-align: center;
+      box-shadow: var(--shadow-card);
+    }
+
+    .slide-visual .big-num {
+      font-size: 2.55rem;
+      font-weight: 800;
+      color: var(--accent-blue-dark);
+    }
+
+    .slide-controls {
+      position: absolute;
+      bottom: 1.2rem;
+      right: 2rem;
+      display: flex;
+      gap: 0.6rem;
+      align-items: center;
+    }
+
+    .dot {
+      width: 11px;
+      height: 11px;
+      border-radius: 50%;
+      background: #cbd5e1;
+      cursor: pointer;
+      transition: all 0.25s;
+    }
+
+    .dot.active {
+      width: 28px;
+      border-radius: 99px;
+      background: var(--accent-blue);
+    }
+
+    .slide-arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: var(--bg-surface);
+      border: 1px solid var(--border-light);
+      color: var(--text-main);
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 1.05rem;
+      box-shadow: var(--shadow-card);
+    }
+
+    .slide-arrow:hover {
+      border-color: var(--accent-blue);
+      color: var(--accent-blue);
+    }
+
+    .slide-arrow.prev { left: 12px; }
+    .slide-arrow.next { right: 12px; }
+
+    /* 5 Token Metric Boxes */
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(215px, 1fr));
+      gap: 1.2rem;
+    }
+
+    .metric-box {
+      background: var(--bg-card);
+      border: 1px solid var(--border-light);
+      border-radius: 16px;
+      padding: 1.4rem;
+      position: relative;
+      overflow: hidden;
+      box-shadow: var(--shadow-card);
+      transition: transform 0.2s, border-color 0.2s;
+    }
+
+    .metric-box:hover {
+      transform: translateY(-3px);
+      border-color: var(--accent-blue);
+    }
+
+    .metric-box::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 3.5px;
+      background: var(--gradient-primary);
+    }
+
+    .metric-label {
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.7px;
+      color: var(--text-muted);
+      margin-bottom: 0.45rem;
+    }
+
+    .metric-value {
+      font-size: 1.55rem;
+      font-weight: 800;
+      color: var(--text-main);
+      margin-bottom: 0.25rem;
+    }
+
+    .metric-sub {
+      font-size: 0.83rem;
+      font-weight: 600;
+      color: var(--accent-emerald);
+    }
+
+    /* Cards & Grids */
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+      gap: 1.6rem;
+    }
+
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-light);
+      border-radius: 18px;
+      padding: 1.8rem;
+      box-shadow: var(--shadow-card);
+    }
+
+    .card h3 {
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      color: var(--accent-blue-dark);
+    }
+
+    .step-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.85rem;
+      margin-bottom: 1.2rem;
+    }
+
+    .step-item {
+      display: flex;
+      align-items: center;
+      gap: 0.9rem;
+      background: var(--bg-subtle);
+      padding: 0.78rem 1rem;
+      border-radius: 12px;
+      border: 1px solid var(--border-light);
+      color: var(--text-secondary);
+    }
+
+    .step-item strong {
+      color: var(--text-main);
+    }
+
+    .step-num {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: var(--gradient-primary);
+      color: #ffffff;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.85rem;
+      flex-shrink: 0;
+    }
+
+    .input-group {
+      margin-bottom: 1rem;
+    }
+
+    .input-group label {
+      display: block;
+      font-size: 0.86rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      margin-bottom: 0.35rem;
+    }
+
+    .input-group input, .input-group select {
+      width: 100%;
+      padding: 0.75rem 0.95rem;
+      border-radius: 10px;
+      border: 1px solid #cbd5e1;
+      background: var(--bg-surface);
+      color: var(--text-main);
+      font-size: 0.95rem;
+    }
+
+    .input-group input:focus {
+      outline: none;
+      border-color: var(--accent-blue);
+      box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.14);
+    }
+
+    .status-pill {
+      display: inline-block;
+      padding: 0.35rem 0.75rem;
+      border-radius: 8px;
+      font-size: 0.83rem;
+      font-weight: 600;
+      background: rgba(4, 120, 87, 0.1);
+      color: var(--accent-emerald);
+      border: 1px solid rgba(4, 120, 87, 0.28);
+      margin-top: 0.5rem;
+    }
+
+    /* Staking Plans & Fund Allocation */
+    .plan-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1.1rem;
+      margin-bottom: 1.4rem;
+    }
+
+    .plan-box {
+      background: var(--bg-subtle);
+      border: 1px solid var(--border-light);
+      border-radius: 14px;
+      padding: 1.25rem;
+    }
+
+    .plan-box h4 {
+      color: var(--accent-purple);
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: 0.35rem;
+    }
+
+    .plan-rate {
+      font-size: 1.85rem;
+      font-weight: 800;
+      color: var(--accent-blue-dark);
+    }
+
+    .badge-cap {
+      background: rgba(180, 83, 9, 0.1);
+      color: var(--accent-amber);
+      border: 1px solid rgba(180, 83, 9, 0.3);
+      padding: 0.24rem 0.65rem;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      font-weight: 700;
+    }
+
+    .alloc-bar {
+      height: 14px;
+      border-radius: 99px;
+      overflow: hidden;
+      display: flex;
+      margin: 1rem 0;
+      background: #e2e8f0;
+    }
+
+    .alloc-seg { height: 100%; }
+
+    .alloc-legend {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 0.65rem;
+      font-size: 0.87rem;
+      color: var(--text-secondary);
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .swatch {
+      width: 12px;
+      height: 12px;
+      border-radius: 3px;
+      flex-shrink: 0;
+    }
+
+    /* Tables */
+    .table-wrap {
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.93rem;
+    }
+
+    th, td {
+      padding: 0.85rem 1rem;
+      text-align: left;
+      border-bottom: 1px solid var(--border-light);
+      color: var(--text-secondary);
+    }
+
+    th {
+      color: var(--text-main);
+      font-weight: 700;
+      background: var(--bg-subtle);
+    }
+
+    tr:hover td {
+      background: #f8fafc;
+    }
+
+    .calc-result {
+      margin-top: 1rem;
+      padding: 1rem 1.15rem;
+      border-radius: 12px;
+      background: var(--bg-subtle);
+      border: 1px solid var(--border-light);
+      color: var(--text-secondary);
+      font-size: 0.92rem;
+    }
+
+    .calc-result strong {
+      color: var(--text-main);
+    }
+
+    footer {
+      text-align: center;
+      padding: 2rem 5%;
+      background: var(--bg-surface);
+      border-top: 1px solid var(--border-light);
+      color: var(--text-muted);
+      font-size: 0.88rem;
+    }
+
+    footer strong {
+      color: var(--text-main);
+    }
+
+    @media (max-width: 768px) {
+      .slide.active {
+        grid-template-columns: 1fr;
+        padding: 2rem 1.8rem;
+      }
+      .slide h1 { font-size: 1.75rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header>
+    <div class="logo">◈ TENET DEFI</div>
+    <nav>
+      <a href="#metrics">Token Metrics</a>
+      <a href="#onboarding">Web3 Register</a>
+      <a href="#staking">Staking & Allocation</a>
+      <a href="#team-roi">20-Level ROI</a>
+      <a href="#withdraw-swap">Withdraw & Swap</a>
+      <a href="#ranks">Rank Salary</a>
+    </nav>
+    <button class="btn-primary" id="headerConnectBtn" onclick="connectWeb3Wallet()">Connect Web3 Wallet</button>
+  </header>
+
+  <main>
+
+    <!-- 1. Hero Slideshow -->
+    <section id="hero">
+      <div class="slideshow-container">
+        <button class="slide-arrow prev" onclick="changeSlide(-1)">❮</button>
+        <button class="slide-arrow next" onclick="changeSlide(1)">❯</button>
+
+        <!-- Slide 1 -->
+        <div class="slide active">
+          <div>
+            <span class="slide-badge">Decentralized Protocol • Smart Contract Audited</span>
+            <h1>TENET Decentralized Token Staking Ecosystem</h1>
+            <p>Earn up to <strong>0.60% Daily ROI</strong> with automated 2X return caps, transparent smart-contract fund allocation, and instant live-rate token withdrawals.</p>
+            <div style="display:flex; gap:0.8rem; flex-wrap:wrap;">
+              <button class="btn-primary" onclick="document.getElementById('onboarding').scrollIntoView({behavior:'smooth'})">Start Web3 Registration</button>
+              <button class="btn-outline" onclick="document.getElementById('staking').scrollIntoView({behavior:'smooth'})">Calculate Staking ROI</button>
+            </div>
+          </div>
+          <div class="slide-visual">
+            <div style="color:var(--text-muted); font-size:0.85rem; font-weight:700;">MAX RETURN CAP</div>
+            <div class="big-num">2.0X ROI</div>
+            <div style="margin-top:0.5rem; font-size:0.9rem; font-weight:600; color:var(--accent-emerald);">Auto-Stop Smart Contract Protection</div>
+          </div>
+        </div>
+
+        <!-- Slide 2 -->
+        <div class="slide">
+          <div>
+            <span class="slide-badge">Transparent Smart Treasury</span>
+            <h1>100% On-Chain Staking Fund Allocation</h1>
+            <p>Every staked dollar is autonomously split by the smart contract: <strong>40% Liquidity Pool</strong>, <strong>40% Trading Algo</strong>, <strong>12% Referral</strong>, <strong>5% Admin</strong>, and <strong>3% Marketing</strong>.</p>
+            <button class="btn-primary" onclick="document.getElementById('staking').scrollIntoView({behavior:'smooth'})">View Treasury Split</button>
+          </div>
+          <div class="slide-visual">
+            <div style="color:var(--text-muted); font-size:0.85rem; font-weight:700;">LIQUIDITY + ALGO BACKING</div>
+            <div class="big-num">80%</div>
+            <div style="margin-top:0.5rem; font-size:0.9rem; font-weight:600; color:var(--accent-blue-dark);">40% LP + 40% Quant Algo Wallet</div>
+          </div>
+        </div>
+
+        <!-- Slide 3 -->
+        <div class="slide">
+          <div>
+            <span class="slide-badge">20-Level Team Rewards & Rank Salary</span>
+            <h1>Build Global Web3 Teams & Earn Monthly Rank Salary</h1>
+            <p>Unlock deep 20-level Team ROI commissions starting at <strong>10% on Level 1</strong> plus recurring monthly leadership salaries for eligible ranks.</p>
+            <button class="btn-primary" onclick="document.getElementById('team-roi').scrollIntoView({behavior:'smooth'})">Explore 20-Level Plan</button>
+          </div>
+          <div class="slide-visual">
+            <div style="color:var(--text-muted); font-size:0.85rem; font-weight:700;">ANYTIME WALLET SWAP</div>
+            <div class="big-num">$10 MIN</div>
+            <div style="margin-top:0.5rem; font-size:0.9rem; font-weight:600; color:var(--accent-amber);">Live Rate Minting • 10% Swap Fee (5% LP / 5% Admin)</div>
+          </div>
+        </div>
+
+        <div class="slide-controls">
+          <span class="dot active" onclick="goToSlide(0)"></span>
+          <span class="dot" onclick="goToSlide(1)"></span>
+          <span class="dot" onclick="goToSlide(2)"></span>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. Five Live Token Metric Boxes -->
+    <section id="metrics">
+      <h2 class="section-title">TENET Live Token Metrics</h2>
+      <p class="section-sub">Real-time decentralized smart contract telemetry and supply lock status.</p>
+
+      <div class="metrics-grid">
+        <div class="metric-box">
+          <div class="metric-label">1. Token Value</div>
+          <div class="metric-value" id="boxTokenValue">$0.4250</div>
+          <div class="metric-sub">+6.8% (24h Live Oracle Rate)</div>
+        </div>
+
+        <div class="metric-box">
+          <div class="metric-label">2. Liquidity Pool</div>
+          <div class="metric-value" id="boxLiquidity">$1,840,500</div>
+          <div class="metric-sub">40% Stake + 5% Swap Inflow</div>
+        </div>
+
+        <div class="metric-box">
+          <div class="metric-label">3. Tokens Supply</div>
+          <div class="metric-value" id="boxSupply">100,000,000</div>
+          <div class="metric-sub">TENET Max Total Supply</div>
+        </div>
+
+        <div class="metric-box">
+          <div class="metric-label">4. Burned Tokens</div>
+          <div class="metric-value" id="boxBurned">12,450,000</div>
+          <div class="metric-sub">12.45% Permanently Burned</div>
+        </div>
+
+        <div class="metric-box">
+          <div class="metric-label">5. Locked 10%</div>
+          <div class="metric-value" id="boxLocked">10,000,000</div>
+          <div class="metric-sub">10% Treasury Smart-Lock</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. Referral Link & Web3 Crypto Registration Process -->
+    <section id="onboarding">
+      <h2 class="section-title">Web3 Registration & Referral Onboarding</h2>
+      <p class="section-sub">Join exclusively through a decentralized referral link, connect your Web3 wallet, pay network gas, and initialize your on-chain account.</p>
+
+      <div class="grid-2">
+        <div class="card">
+          <h3>Crypto Account Creation Flow</h3>
+          <ul class="step-list">
+            <li class="step-item">
+              <span class="step-num">1</span>
+              <div>
+                <strong>Open Referral Link</strong><br />
+                <span style="font-size:0.85rem; color:var(--text-muted);">Verify sponsor wallet address embedded in URL.</span>
+              </div>
+            </li>
+            <li class="step-item">
+              <span class="step-num">2</span>
+              <div>
+                <strong>Connect Web3 Wallet</strong><br />
+                <span style="font-size:0.85rem; color:var(--text-muted);">MetaMask, Trust Wallet, or WalletConnect (BNB/ETH).</span>
+              </div>
+            </li>
+            <li class="step-item">
+              <span class="step-num">3</span>
+              <div>
+                <strong>Pay Network Gas Fee</strong><br />
+                <span style="font-size:0.85rem; color:var(--text-muted);">Approve minimal smart contract gas (~0.0015 BNB) to register on-chain.</span>
+              </div>
+            </li>
+            <li class="step-item">
+              <span class="step-num">4</span>
+              <div>
+                <strong>Account Created on Blockchain</strong><br />
+                <span style="font-size:0.85rem; color:var(--text-muted);">Receive your unique referral link & unlock staking pools.</span>
+              </div>
+            </li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <h3>Interactive Web3 Registration</h3>
+          <div class="input-group">
+            <label>Referral Link / Sponsor Address</label>
+            <input type="text" id="refInput" value="https://tenet-defi.io/?ref=0x94A8...7F21" />
+          </div>
+
+          <div class="input-group">
+            <label>Connected Web3 Wallet</label>
+            <input type="text" id="walletAddrInput" readonly placeholder="Not Connected — Click Connect Wallet" />
+          </div>
+
+          <div style="display:flex; gap:0.75rem; flex-wrap:wrap; margin-top:1rem;">
+            <button class="btn-outline" onclick="connectWeb3Wallet()">1. Connect Web3 Wallet</button>
+            <button class="btn-primary" onclick="executeCryptoRegistration()">2. Pay Gas & Create Account</button>
+          </div>
+
+          <div id="regStatusBox" style="margin-top:1rem; font-size:0.88rem; color:var(--text-muted);">
+            Status: Awaiting Web3 wallet connection...
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. Staking Tiers & 100% Smart Contract Distribution -->
+    <section id="staking">
+      <h2 class="section-title">Staking Tiers & Smart Contract Allocation</h2>
+      <p class="section-sub">Two high-yield staking tiers with a strict 2X return stop cap and automated 5-wallet fund distribution.</p>
+
+      <div class="grid-2">
+        <div class="card">
+          <h3>Staking Plans & ROI Simulator</h3>
+          <div class="plan-cards">
+            <div class="plan-box">
+              <h4>Starter Tier</h4>
+              <div class="plan-rate">0.45% <span style="font-size:0.9rem; font-weight:600; color:var(--text-muted);">/ day</span></div>
+              <p style="font-size:0.88rem; color:var(--text-muted); margin-top:0.4rem;">Stake Range: <strong style="color:var(--text-main);">$20 – $499</strong></p>
+              <div style="margin-top:0.6rem;"><span class="badge-cap">Returns: 2X Stop ROI</span></div>
+            </div>
+
+            <div class="plan-box">
+              <h4>Pro & Whale Tier</h4>
+              <div class="plan-rate">0.60% <span style="font-size:0.9rem; font-weight:600; color:var(--text-muted);">/ day</span></div>
+              <p style="font-size:0.88rem; color:var(--text-muted); margin-top:0.4rem;">Stake Range: <strong style="color:var(--text-main);">$500 – $1,000,000</strong></p>
+              <div style="margin-top:0.6rem;"><span class="badge-cap">Returns: 2X Stop ROI</span></div>
+            </div>
+          </div>
+
+          <div class="input-group">
+            <label>Simulate Your Stake Amount ($20 to $1,000,000)</label>
+            <input type="number" id="stakeAmountInput" value="1000" min="20" max="1000000" oninput="calculateStake()" />
+          </div>
+
+          <div class="calc-result" id="stakeCalcResult"></div>
+        </div>
+
+        <div class="card">
+          <h3>Staking Amount Distribution (100%)</h3>
+          <p style="font-size:0.9rem; color:var(--text-muted); margin-bottom:0.8rem;">
+            Every deposit is immediately routed across 5 decentralized smart-contract wallets:
+          </p>
+
+          <div class="alloc-bar">
+            <div class="alloc-seg" style="width:40%; background:#0284c7;" title="40% Liquidity Pool Wallet"></div>
+            <div class="alloc-seg" style="width:40%; background:#6d28d9;" title="40% Trading Algo Wallet"></div>
+            <div class="alloc-seg" style="width:12%; background:#047857;" title="12% Referral Incentive"></div>
+            <div class="alloc-seg" style="width:5%; background:#b45309;" title="5% Admin Wallet"></div>
+            <div class="alloc-seg" style="width:3%; background:#be185d;" title="3% Promotion & Marketing"></div>
+          </div>
+
+          <div class="alloc-legend">
+            <div class="legend-item"><span class="swatch" style="background:#0284c7;"></span> <strong>40%</strong> Liquidity Pool Wallet</div>
+            <div class="legend-item"><span class="swatch" style="background:#6d28d9;"></span> <strong>40%</strong> Trading Algo Wallet</div>
+            <div class="legend-item"><span class="swatch" style="background:#047857;"></span> <strong>12%</strong> Referral Incentive</div>
+            <div class="legend-item"><span class="swatch" style="background:#b45309;"></span> <strong>5%</strong> Admin Wallet</div>
+            <div class="legend-item"><span class="swatch" style="background:#be185d;"></span> <strong>3%</strong> Promotion & Marketing</div>
+          </div>
+
+          <div class="calc-result" id="allocationSplitResult" style="margin-top:1.2rem;"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. 20-Level Team ROI Structure -->
+    <section id="team-roi">
+      <h2 class="section-title">20-Level Team ROI Commission Structure</h2>
+      <p class="section-sub">Earn daily passive overrides from your network's staking ROI across 20 full levels.</p>
+
+      <div class="card">
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Generation / Level</th>
+                <th>Team ROI Percentage</th>
+                <th>Qualification Requirement</th>
+                <th>Commission Type</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>1st Level</strong></td>
+                <td style="color:var(--accent-blue-dark); font-weight:700;">10%</td>
+                <td>1 Direct Active Referral</td>
+                <td>Daily ROI Override</td>
+              </tr>
+              <tr>
+                <td><strong>2nd Level</strong></td>
+                <td style="color:var(--accent-blue-dark); font-weight:700;">5%</td>
+                <td>2 Direct Active Referrals</td>
+                <td>Daily ROI Override</td>
+              </tr>
+              <tr>
+                <td><strong>3rd Level</strong></td>
+                <td style="color:var(--accent-blue-dark); font-weight:700;">5%</td>
+                <td>3 Direct Active Referrals</td>
+                <td>Daily ROI Override</td>
+              </tr>
+              <tr>
+                <td><strong>4th Level</strong></td>
+                <td style="color:var(--accent-blue-dark); font-weight:700;">5%</td>
+                <td>4 Direct Active Referrals</td>
+                <td>Daily ROI Override</td>
+              </tr>
+              <tr>
+                <td><strong>5th to 10th Levels</strong></td>
+                <td style="color:var(--accent-purple); font-weight:700;">3% per level</td>
+                <td>6 Direct Active Referrals</td>
+                <td>Daily ROI Override</td>
+              </tr>
+              <tr>
+                <td><strong>11th to 15th Levels</strong></td>
+                <td style="color:var(--accent-emerald); font-weight:700;">2% per level</td>
+                <td>8 Direct Active Referrals</td>
+                <td>Daily ROI Override</td>
+              </tr>
+              <tr>
+                <td><strong>16th to 20th Levels</strong></td>
+                <td style="color:var(--accent-amber); font-weight:700;">1% per level</td>
+                <td>10 Direct Active Referrals</td>
+                <td>Daily ROI Override</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- 6. Withdrawal & Instant Wallet Swap Calculator -->
+    <section id="withdraw-swap">
+      <h2 class="section-title">Withdrawal & Instant Wallet Swap</h2>
+      <p class="section-sub">Minimum withdrawal $10. Tokens are generated at the live oracle rate and can be swapped in your wallet anytime with a 10% ecosystem fee.</p>
+
+      <div class="grid-2">
+        <div class="card">
+          <h3>Withdrawal & Swap Rules</h3>
+          <ul class="step-list">
+            <li class="step-item">
+              <span class="step-num">✓</span>
+              <div><strong>Minimum Withdrawal: $10</strong> — Claim earned ROI and team rewards once balance hits $10.</div>
+            </li>
+            <li class="step-item">
+              <span class="step-num">✓</span>
+              <div><strong>Live Rate Token Generation</strong> — Withdrawal amount converts into TENET tokens at the exact real-time market rate ($0.4250).</div>
+            </li>
+            <li class="step-item">
+              <span class="step-num">✓</span>
+              <div><strong>Swap Anytime in Wallet</strong> — Trade TENET freely via DEX/wallet anytime.</div>
+            </li>
+            <li class="step-item">
+              <span class="step-num">✓</span>
+              <div><strong>10% Swap Deduction</strong> — Split automatically: <strong>5% Admin Wallet</strong> & <strong>5% Liquidity Pool</strong>.</div>
+            </li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <h3>Live Withdraw & Swap Simulator</h3>
+          <div class="input-group">
+            <label>Withdrawal Amount in USD (Min $10)</label>
+            <input type="number" id="withdrawInput" value="100" min="10" oninput="calculateWithdrawSwap()" />
+          </div>
+
+          <div class="calc-result" id="withdrawSwapOutput"></div>
+
+          <button class="btn-primary" style="margin-top:1rem; width:100%;" onclick="simulateWithdrawAction()">Generate TENET & Simulate Wallet Swap</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 7. Rank Eligibility & Monthly Leadership Salary -->
+    <section id="ranks">
+      <h2 class="section-title">Rank Eligibility & Monthly Leadership Salary</h2>
+      <p class="section-sub">Achieve volume milestones across your team to unlock fixed recurring monthly leadership salaries.</p>
+
+      <div class="card">
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Rank Title</th>
+                <th>Self Stake</th>
+                <th>Team Business Volume</th>
+                <th>Direct Referrals</th>
+                <th>Monthly Salary</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Starter Leader</strong></td>
+                <td>$100</td>
+                <td>$5,000</td>
+                <td>5 Active</td>
+                <td style="color:var(--accent-emerald); font-weight:700;">$150 / Month</td>
+              </tr>
+              <tr>
+                <td><strong>Silver Executive</strong></td>
+                <td>$500</td>
+                <td>$25,000</td>
+                <td>10 Active</td>
+                <td style="color:var(--accent-emerald); font-weight:700;">$600 / Month</td>
+              </tr>
+              <tr>
+                <td><strong>Gold Director</strong></td>
+                <td>$1,000</td>
+                <td>$100,000</td>
+                <td>15 Active</td>
+                <td style="color:var(--accent-emerald); font-weight:700;">$2,000 / Month</td>
+              </tr>
+              <tr>
+                <td><strong>Platinum Ambassador</strong></td>
+                <td>$5,000</td>
+                <td>$500,000</td>
+                <td>20 Active</td>
+                <td style="color:var(--accent-emerald); font-weight:700;">$7,500 / Month</td>
+              </tr>
+              <tr>
+                <td><strong>TENET Crown Sovereign</strong></td>
+                <td>$10,000</td>
+                <td>$2,000,000</td>
+                <td>25 Active</td>
+                <td style="color:var(--accent-blue-dark); font-weight:800;">$25,000 / Month</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer>
+    <strong>TENET Decentralized Protocol</strong> • Smart Contract Staking, Liquidity Locking & Automated Algorithmic Treasury • Always verify contract addresses before signing Web3 gas transactions.
+  </footer>
+
+  <script>
+    // Slideshow Logic
+    let currentSlide = 0;
+    const slides = document.querySelectorAll('.slide');
+    const dots = document.querySelectorAll('.dot');
+
+    function showSlide(index) {
+      if (index >= slides.length) currentSlide = 0;
+      else if (index < 0) currentSlide = slides.length - 1;
+      else currentSlide = index;
+
+      slides.forEach((s, i) => s.classList.toggle('active', i === currentSlide));
+      dots.forEach((d, i) => d.classList.toggle('active', i === currentSlide));
+    }
+
+    function changeSlide(step) {
+      showSlide(currentSlide + step);
+    }
+
+    function goToSlide(index) {
+      showSlide(index);
+    }
+
+    setInterval(() => changeSlide(1), 6000);
+
+    // Web3 Wallet & Registration Simulation
+    let connectedWallet = null;
+
+    async function connectWeb3Wallet() {
+      const statusBox = document.getElementById('regStatusBox');
+      const walletInput = document.getElementById('walletAddrInput');
+      const headerBtn = document.getElementById('headerConnectBtn');
+
+      if (window.ethereum) {
+        try {
+          const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+          connectedWallet = accounts[0];
+        } catch (err) {
+          statusBox.innerHTML = `<span style="color:#b45309; font-weight:600;">Wallet connection rejected by user.</span>`;
+          return;
+        }
+      } else {
+        connectedWallet = "0x71C94E82B3A90D4412F98C4E19A03B88E4D2";
+      }
+
+      const shortAddr = connectedWallet.slice(0, 6) + "..." + connectedWallet.slice(-4);
+      walletInput.value = connectedWallet;
+      headerBtn.textContent = shortAddr;
+      statusBox.innerHTML = `<span class="status-pill">✓ Web3 Wallet Connected: ${shortAddr}</span>`;
+    }
+
+    function executeCryptoRegistration() {
+      const statusBox = document.getElementById('regStatusBox');
+      const refVal = document.getElementById('refInput').value.trim();
+
+      if (!refVal) {
+        statusBox.innerHTML = `<span style="color:#b45309; font-weight:600;">⚠ A valid referral link is required for registration.</span>`;
+        return;
+      }
+      if (!connectedWallet) {
+        statusBox.innerHTML = `<span style="color:#b45309; font-weight:600;">⚠ Please connect your Web3 wallet first.</span>`;
+        return;
+      }
+
+      statusBox.innerHTML = `<span style="color:#0369a1; font-weight:600;">⏳ Broadcasting registration transaction & paying network gas fee...</span>`;
+
+      setTimeout(() => {
+        const userRefLink = `https://tenet-defi.io/?ref=${connectedWallet.slice(0, 10)}`;
+        statusBox.innerHTML = `
+          <div class="status-pill">✓ Gas Paid • On-Chain Account Created!</div>
+          <div style="margin-top:0.5rem; font-size:0.85rem; color:#0f172a;">
+            Your Personal Referral Link: <strong>${userRefLink}</strong>
+          </div>
+        `;
+      }, 1100);
+    }
+
+    // Staking & Allocation Calculator
+    const TOKEN_RATE = 0.4250;
+
+    function calculateStake() {
+      const amount = parseFloat(document.getElementById('stakeAmountInput').value) || 0;
+      const resBox = document.getElementById('stakeCalcResult');
+      const allocBox = document.getElementById('allocationSplitResult');
+
+      if (amount < 20 || amount > 1000000) {
+        resBox.innerHTML = `<span style="color:#b45309; font-weight:600;">Please enter a valid stake between <strong>$20</strong> and <strong>$1,000,000</strong>.</span>`;
+        allocBox.innerHTML = "";
+        return;
+      }
+
+      const dailyRate = amount >= 500 ? 0.006 : 0.0045;
+      const rateLabel = amount >= 500 ? "0.60% Daily (Pro/Whale Tier)" : "0.45% Daily (Starter Tier)";
+      const dailyUsd = amount * dailyRate;
+      const maxReturn = amount * 2;
+      const daysTo2x = Math.ceil(maxReturn / dailyUsd);
+
+      resBox.innerHTML = `
+        <strong>Active Tier:</strong> ${rateLabel}<br/>
+        <strong>Daily ROI Earned:</strong> $${dailyUsd.toFixed(2)} / day (~${(dailyUsd / TOKEN_RATE).toFixed(2)} TENET)<br/>
+        <strong>2X Stop ROI Cap:</strong> $${maxReturn.toLocaleString()} total return (~${daysTo2x} days)
+      `;
+
+      allocBox.innerHTML = `
+        <strong>Smart Contract Split for $${amount.toLocaleString()}:</strong><br/>
+        • Liquidity Pool (40%): <strong>$${(amount * 0.40).toFixed(2)}</strong><br/>
+        • Trading Algo Wallet (40%): <strong>$${(amount * 0.40).toFixed(2)}</strong><br/>
+        • Referral Incentive (12%): <strong>$${(amount * 0.12).toFixed(2)}</strong><br/>
+        • Admin Wallet (5%): <strong>$${(amount * 0.05).toFixed(2)}</strong><br/>
+        • Promotion & Marketing (3%): <strong>$${(amount * 0.03).toFixed(2)}</strong>
+      `;
+    }
+
+    // Withdrawal & Swap Calculator
+    function calculateWithdrawSwap() {
+      const usd = parseFloat(document.getElementById('withdrawInput').value) || 0;
+      const out = document.getElementById('withdrawSwapOutput');
+
+      if (usd < 10) {
+        out.innerHTML = `<span style="color:#b45309; font-weight:600;">Minimum withdrawal amount is <strong>$10.00</strong>.</span>`;
+        return;
+      }
+
+      const grossTokens = usd / TOKEN_RATE;
+      const feeTokens = grossTokens * 0.10;
+      const netTokens = grossTokens - feeTokens;
+      const netUsd = usd * 0.90;
+      const adminShareUsd = usd * 0.05;
+      const lpShareUsd = usd * 0.05;
+
+      out.innerHTML = `
+        <strong>Live Oracle Rate:</strong> 1 TENET = $${TOKEN_RATE.toFixed(4)}<br/>
+        <strong>Tokens Generated on Withdraw:</strong> ${grossTokens.toFixed(2)} TENET<br/>
+        <strong>10% Swap Deduction:</strong> -${feeTokens.toFixed(2)} TENET ($${adminShareUsd.toFixed(2)} Admin + $${lpShareUsd.toFixed(2)} Liquidity Pool)<br/>
+        <strong>Net Swapped Output:</strong> <span style="color:#047857; font-weight:700;">${netTokens.toFixed(2)} TENET ($${netUsd.toFixed(2)})</span>
+      `;
+    }
+
+    function simulateWithdrawAction() {
+      const usd = parseFloat(document.getElementById('withdrawInput').value) || 0;
+      if (usd < 10) {
+        alert("Minimum withdrawal is $10.");
+        return;
+      }
+      alert(`Success! ${(usd / TOKEN_RATE).toFixed(2)} TENET generated at $${TOKEN_RATE} rate. 10% swap fee (5% Admin / 5% Liquidity Pool) routed automatically.`);
+    }
+
+    // Initialize calculators on page load
+    calculateStake();
+    calculateWithdrawSwap();
+  </script>
+</body>
+</html>
